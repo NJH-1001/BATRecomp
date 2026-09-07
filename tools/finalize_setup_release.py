@@ -18,7 +18,7 @@ for filename in sys.argv[1:]:
                 raise ValueError('Unsafe archive path')
             excluded = bool(set(path.parts) & {
                 'docs', 'tests', 'test_data', 'analysis', 'captures', 'generated',
-                '.git', '.github', 'saves', 'ghidra', '__pycache__'})
+                '.git', '.github', 'saves', 'ghidra', '__pycache__', 'cycle_testrom'})
             excluded |= path.suffix.lower() in {'.rom', '.iso', '.cue', '.mcd', '.mcr', '.chd', '.ips', '.pst'}
             excluded |= path.suffix.lower() == '.bin' and path.name.lower() != 'openbios.bin'
             excluded |= path.name == 'boxart_sonic1.tga'
