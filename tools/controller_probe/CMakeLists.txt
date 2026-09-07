@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.20)
+project(bat_controller_probe LANGUAGES CXX)
+find_package(SDL3 CONFIG REQUIRED)
+add_executable(controller_probe main.cpp)
+target_link_libraries(controller_probe PRIVATE SDL3::SDL3)
+target_compile_features(controller_probe PRIVATE cxx_std_17)

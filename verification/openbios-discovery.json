@@ -1,0 +1,71 @@
+{
+  "bios_sha256": "fabe498fbf224e4721f12f31b6f5fe0659205e341dc4e5c5f91b9bd1a1011c57",
+  "source_commit": "55fbf0468345acfbe5512628a3be5c0cfe3f22e7",
+  "sources": [
+    "https://github.com/grumpycoders/pcsx-redux/blob/55fbf0468345acfbe5512628a3be5c0cfe3f22e7/src/mips/openbios/psx-bios.ld",
+    "https://github.com/grumpycoders/pcsx-redux/blob/55fbf0468345acfbe5512628a3be5c0cfe3f22e7/src/mips/openbios/kernel/handlers.c",
+    "https://github.com/grumpycoders/pcsx-redux/blob/55fbf0468345acfbe5512628a3be5c0cfe3f22e7/src/mips/openbios/kernel/vectors.s"
+  ],
+  "static_verification": {
+    "method": "Ghidra MCP raw memory and function disassembly, compared with pinned OpenBIOS source",
+    "removed_seeds": [
+      "0xBFC095F8",
+      "0xBFC22674",
+      "0xBFC227D4",
+      "0xBFC227E4"
+    ],
+    "rodata": {
+      "address": "0xBFC095F8",
+      "words": [
+        "0x00000004",
+        "0x00000010",
+        "0x801FFF00",
+        "0x000046A0",
+        "0x000065BC"
+      ],
+      "meaning": "linker .rodata g_defaultConfiguration followed by data and BSS lengths",
+      "predecessor": "0xBFC095F0: 0x1000FFE8 unconditional BEQ to 0xBFC09594; delay slot NOP; no fallthrough into .rodata"
+    },
+    "a0_table": {
+      "copy_function": "0xBFC05E54 copyA0table: source 0x464C, destination 0x200, length 0x300",
+      "rom_range_exclusive": [
+        "0xBFC22620",
+        "0xBFC22920"
+      ],
+      "ram_range_exclusive": [
+        "0x0000464C",
+        "0x0000494C"
+      ],
+      "source_declaration": "romA0table has 0xC0 pointer entries",
+      "mapping": "ROM = 0xBFC1E4D4 + RAM - 0x500",
+      "conclusion": "All three remaining removed seeds address pointer-table data, not instructions"
+    }
+  },
+  "changes": [
+    "Full BIOS CLI writes discovery manifests and fails before C emission when discovery reports unsupported instructions",
+    "BEQ with identical operands has only a taken successor plus its delay slot",
+    "ELF code-pointer seed scan excludes addresses inside defined STT_OBJECT symbols even in executable output sections",
+    "Removed four statically proven data-only seeds; no generated C was edited"
+  ],
+  "regressions": {
+    "full_function_emitter_test": "passed including unconditional BEQ, nonzero identical operands, reachable illegal conditional fallthrough, delay-slot and target coverage",
+    "bios_seed_objects_test": "passed synthetic ELF: mixed code/data, object interior, object endpoint, valid function, unaligned pointer"
+  },
+  "regeneration": {
+    "input_seeds": 643,
+    "functions_emitted": 695,
+    "instructions": 17522,
+    "unsupported": 0,
+    "interpreted": 0,
+    "skipped": 0,
+    "dispatch_entries": 3984,
+    "accepted_as_verified": "static emission only; runtime intro now visible, oracle comparison pending"
+  },
+  "remaining_blocker": {
+    "resolved": true,
+    "cause": "fastMemset JR at BFC1E574 uses table RAM 5A8 = ROM BFC1E57C, index (a0 & 3), four entries. Previous scan used unrelated sltiu v1,a2,32 at BFC1E51C. Ghidra instruction range BFC1E544..BFC1E578 verified.",
+    "fix": "Bound scan tracks SLL-by-2 index and accepts its ANDI or SLTIU instead of any comparison",
+    "test": "synthetic masked-index fixture contains unrelated SLTIU 32 and code after a four-entry table; passed",
+    "regeneration": "no unresolved dispatch warnings"
+  }
+}

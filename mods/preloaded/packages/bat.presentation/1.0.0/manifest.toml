@@ -1,0 +1,48 @@
+format_version = 6
+id = "bat.presentation"
+version = "1.0.0"
+name = "Toshinden Display Options"
+author = "BATRecomp"
+description = "Optional CRT-inspired presentation. Stock 4:3 remains the default."
+resolver = "declarative"
+save_compatibility = "shared"
+
+[[target]]
+game_id = "SCUS-94200"
+
+[[feature]]
+id = "crt"
+name = "CRT Display"
+description = "JVC-inspired CRT colour with lighter scanlines, or Trinitron colour with stronger scanlines. Simplified host effects, not exact MiSTer filter ports or phosphor-mask simulations. Requires OpenGL for scanlines."
+group = "Visual"
+default_enabled = false
+
+[[option]]
+feature = "crt"
+id = "preset"
+label = "Display style"
+type = "choice"
+default = "jvc"
+
+[[option.choice]]
+value = "jvc"
+label = "JVC-inspired"
+
+[[option.choice]]
+value = "trinitron"
+label = "Sony Trinitron-inspired"
+
+[[plugin]]
+feature = "crt"
+id = "bat.crt"
+
+[[feature]]
+id = "wide"
+name = "16:9 Wider View (Experimental)"
+description = "Wider GTE field of view for 3D scenes. Black areas are visible around arena floors; their cause is under investigation. User testing pending."
+group = "Visual"
+default_enabled = false
+
+[[plugin]]
+feature = "wide"
+id = "bat.wide-projection"

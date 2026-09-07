@@ -1,0 +1,58 @@
+# Autofilled by tools/new_project_layout/probe_disc.py from your legal dump.
+# Review before shipping. Runtime quirks / overlay seeds still need hand work.
+
+[game]
+name = "Battle Arena Toshinden"
+id = "SCUS-94200"
+players = 2
+exe = "disc/SCUS_942.00"
+disc = "../disc/Battle Arena Toshinden (USA).cue"
+load_address = "0x80175000"
+entry_pc = "0x80196CA8"
+text_size = "0x00043800"
+stack_base = "0x801FFFF0"
+
+# Digests are for data Track 01 (first BINARY FILE / TRACK 01).
+[prepare_disc]
+out_dir = "disc"
+bin_name = "Battle Arena Toshinden (USA) (Track 01).bin"
+cue_name = "Battle Arena Toshinden (USA).cue"
+boot_exe = "SCUS_942.00"
+known_sizes = [14662368]
+known_md5 = [
+  "70b362b3b09d0a3c3999ce9f055620e6",
+]
+known_sha1 = [
+  "cb03e66d2a5e68f402f9c64741a94c02ca78d4c5",
+]
+known_crc32 = [
+  "6e59405f",
+]
+
+[recompiler]
+seeds = "seeds/ghidra_funcs.txt"
+out_dir = "generated"
+strict = true
+
+[runtime]
+bios_hle = false
+turbo_loads = false
+window_title = "Battle Arena Toshinden Recompiled"
+memcard_dir = "saves"
+
+[video]
+renderer = "opengl"
+aspect_ratio = "4:3"
+
+[controller]
+p1_device = "auto"
+default_mode = "digital"
+lock_mode = true
+allow_hybrid = false
+
+# Online mount gate: digests + track count + optional TOC fingerprint
+# (see docs/NETPLAY.md).
+[netplay]
+require_cue = true
+required_tracks = 14
+required_disc_fp = "436b9f6c0d2d44b61e2e0608ddfa1fdbaf7b8fec289a5ea563d1be6225c40cd4"

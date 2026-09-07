@@ -1,0 +1,4 @@
+SDL_GameControllerDB
+https://github.com/mdqinc/SDL_GameControllerDB
+Commit: 55c3bc818853e77937c2373527533d7baecd42f8
+Unmodified upstream database; see SDL_GameControllerDB.LICENSE.
