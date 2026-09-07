@@ -92,5 +92,4 @@ exec bash "${PACKAGER}" \
   --project-file display_mods.c \
   --project-dir input \
   --project-dir seeds \
-  --project-dir launcher_assets \
   "${EXTRA_PROJECT[@]}"
