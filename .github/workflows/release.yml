@@ -564,6 +564,9 @@ jobs:
           scripts/package_setup_release.sh build-ci "${{ matrix.artifact }}" build-recompiler
           ls -la dist/
 
+      - name: Remove development assets and audit setup archive
+        run: python3 tools/finalize_setup_release.py dist/BATRecomp-*-"${{ matrix.artifact }}".zip
+
       - name: Verify zip ships the mod catalog
         shell: bash
         run: |
