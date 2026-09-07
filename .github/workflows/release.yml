@@ -414,6 +414,7 @@ jobs:
           # (runtime.cmake checks $VULKAN_SDK first); also seed CMAKE_PREFIX_PATH
           # so find_path works after the empty-_vk_inc fix in runtime.cmake.
           if [[ "$(uname -s)" == "Darwin" ]]; then
+            EXTRA+=("-DCMAKE_DISABLE_FIND_PACKAGE_SDL3=TRUE")
             BREW_PREFIX="$(brew --prefix)"
             export PATH="${BREW_PREFIX}/bin${PATH:+:${PATH}}"
             if command -v brew >/dev/null 2>&1; then
@@ -541,6 +542,23 @@ jobs:
             exit 1
           fi
           echo "lobby pin ok: ${BUILT} (${STAMP})"
+
+      - name: Verify native host dependencies
+        run: |
+          set -euo pipefail
+          if [[ "$(uname -s)" == Darwin ]]; then
+            otool -L build-ci/Battle_Arena_Toshinden_Recompiled
+            BAD=$(otool -L build-ci/Battle_Arena_Toshinden_Recompiled | tail -n +2 | awk '{print $1}' | grep -Ev '^(/usr/lib/|/System/Library/)' || true)
+            if [[ -n "$BAD" ]]; then
+              echo "Unbundled macOS dependencies: $BAD"
+              exit 1
+            fi
+            codesign --force --sign - build-ci/Battle_Arena_Toshinden_Recompiled
+            codesign --verify build-ci/Battle_Arena_Toshinden_Recompiled
+          elif [[ "$(uname -s)" == Linux ]]; then
+            ldd build-ci/Battle_Arena_Toshinden_Recompiled
+            if ldd build-ci/Battle_Arena_Toshinden_Recompiled | grep -q 'not found'; then exit 1; fi
+          fi
 
       - name: Package setup zip
         # Windows code signing (Smart App Control / SmartScreen): the packager

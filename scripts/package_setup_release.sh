@@ -72,13 +72,17 @@ for _sym in psx_symbols.h psx_symbols_overlays.h; do
   fi
 done
 
+EXE_NAME="Battle_Arena_Toshinden_Recompiled"
+if [[ "${ARTIFACT_TAG}" == windows-* ]]; then
+  EXE_NAME="${EXE_NAME}.exe"
+fi
 cd "${ROOT}"
 exec bash "${PACKAGER}" \
   --root "${ROOT}" \
   --build-dir "${BUILD_DIR}" \
   --artifact "${ARTIFACT_TAG}" \
   --zip-prefix BATRecomp \
-  --exe-name Battle_Arena_Toshinden_Recompiled \
+  --exe-name "${EXE_NAME}" \
   --display-name "Battle Arena Toshinden Recompiled" \
   --recompiler-build "${RECOMPILER_BUILD}" \
   --version-env RELEASE_VERSION \
